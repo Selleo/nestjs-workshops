@@ -4,12 +4,10 @@ import {
   CreateDateColumn,
   Entity,
   Index,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './user.type';
-import { SessionEntity } from '../auth/session.entity';
 import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
 import * as crypto from 'crypto';
 
@@ -59,9 +57,6 @@ export class UserEntity extends BaseEntity {
 
   @Column()
   hash: string;
-
-  @OneToMany(() => SessionEntity, (session) => session.user)
-  sessions: SessionEntity[];
 
   set password(password) {
     this.salt = crypto.randomBytes(16).toString('hex');
