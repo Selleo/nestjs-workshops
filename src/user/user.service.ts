@@ -28,4 +28,8 @@ export class UserService {
 
     return user.save();
   }
+
+  async findUserByEmail(email: string): Promise<UserEntity> {
+    return this.userRepository.findOne({ where: { email } });
+  }
 }
