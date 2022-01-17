@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './user.type';
+import { SessionEntity } from '../auth/session.entity';
 
 @Entity({ name: 'user' })
 export class UserEntity {
@@ -35,4 +37,7 @@ export class UserEntity {
 
   @Column({ nullable: true })
   pictureUrl?: string;
+
+  @OneToMany(() => SessionEntity, (session) => session.user)
+  sessions: SessionEntity[];
 }
