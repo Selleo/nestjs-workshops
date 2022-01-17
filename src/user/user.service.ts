@@ -24,7 +24,6 @@ export class UserService {
 
     const user = await this.userRepository.create(userAttrs);
     user.password = password;
-    user.role = UserRole.USER;
 
     return user.save();
   }
