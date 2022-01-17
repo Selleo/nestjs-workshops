@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  db:
+    # always keep to current version in Google Cloud SQL
+    image: mysql:5.7
+    command: [mysqld, --gtid-mode=ON, --enforce-gtid-consistency=ON]
+    restart: always
+    env_file: ./.env
+    volumes:
+      - .docker/mysql:/var/lib/mysql
+      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
+
+  maildev:
+    image: maildev/maildev
+    command: bin/maildev -v --base-pathname /maildev --incoming-user workshops@selleo.com --incoming-pass pass
+    ports:
+      - 1025:1025
+      - 1080:1080
+
+  redis:
+    image: bitnami/redis:6.2.1
+    environment:
+      REDIS_PASSWORD: secret-password
+    ports:
+      - 6379:6379
+    volumes:
+      - ./.docker/redis/data/:/data/
+      - ./.docker/redis/logs/:/var/log/redis/
+
+networks:
+  app:
+    driver: bridge

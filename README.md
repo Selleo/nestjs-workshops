@@ -4,21 +4,24 @@ An app for Selleo's workshops about NestJS
 
 ## Installation
 
+NodeJS: 16.13.2
+
 ```bash
 $ yarn
 ```
 
 ## Running the app
 
+1. Docker-compose with 3rd party services
+
 ```bash
-# development
-$ yarn start
+docker-compose up
+```
 
-# watch mode
+2. NestJS
+
+```bash
 $ yarn start:dev
-
-# production mode
-$ yarn start:prod
 ```
 
 ## Test
