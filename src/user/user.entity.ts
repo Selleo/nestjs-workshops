@@ -39,7 +39,11 @@ export class UserEntity extends BaseEntity {
   name: string;
 
   @Field(() => UserRole)
-  @Column()
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
   role: UserRole;
 
   @Field({ nullable: true })
