@@ -6,12 +6,14 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './user.type';
 import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
 import * as crypto from 'crypto';
+import { FlowEntity } from '../flow/flow.entity';
 
 @InputType({ isAbstract: true })
 @ObjectType('User')
@@ -63,6 +65,9 @@ export class UserEntity extends BaseEntity {
 
   @Column()
   hash: string;
+
+  @OneToMany(() => FlowEntity, (flow) => flow.user)
+  flows: FlowEntity[];
 
   set password(password: string) {
     this.salt = crypto.randomBytes(16).toString('hex');
