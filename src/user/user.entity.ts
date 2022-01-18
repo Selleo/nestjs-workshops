@@ -55,7 +55,7 @@ export class UserEntity extends BaseEntity {
   phone?: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'picture_url' })
   pictureUrl?: string;
 
   @Column()
