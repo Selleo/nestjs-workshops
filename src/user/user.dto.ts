@@ -1,5 +1,6 @@
 import { Field, InputType, PartialType, PickType } from '@nestjs/graphql';
 import { UserEntity } from './user.entity';
+import { Match } from '../util/match.decorator';
 
 @InputType()
 export class UserCreateDto extends PickType(UserEntity, [
@@ -11,6 +12,7 @@ export class UserCreateDto extends PickType(UserEntity, [
   password: string;
 
   @Field()
+  @Match('password')
   passwordConfirmation: string;
 }
 
@@ -25,5 +27,6 @@ export class UserUpdatePasswordDto {
   password: string;
 
   @Field()
+  @Match('password')
   passwordConfirmation: string;
 }

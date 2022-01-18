@@ -16,14 +16,7 @@ export class UserService {
   ) {}
 
   async create(userDto: UserCreateDto): Promise<UserEntity> {
-    const { password, passwordConfirmation, ...userAttrs } = userDto;
-
-    if (password !== passwordConfirmation) {
-      throw new BadRequestException(
-        'user.passwordConfirmationDoNotMatch',
-        'Password and password confirmation do not match',
-      );
-    }
+    const { password, ...userAttrs } = userDto;
 
     const user = await this.userRepository.create(userAttrs);
     user.password = password;
@@ -39,15 +32,8 @@ export class UserService {
 
   async updatePassword(
     user: UserEntity,
-    { password, passwordConfirmation }: UserUpdatePasswordDto,
+    { password }: UserUpdatePasswordDto,
   ): Promise<UserEntity> {
-    if (password !== passwordConfirmation) {
-      throw new BadRequestException(
-        'user.passwordConfirmationDoNotMatch',
-        'Password and password confirmation do not match',
-      );
-    }
-
     user.password = password;
 
     return user.save();
