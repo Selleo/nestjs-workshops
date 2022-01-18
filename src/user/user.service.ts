@@ -1,5 +1,9 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { UserCreateDto, UserUpdateDto } from './user.dto';
+import {
+  UserCreateDto,
+  UserUpdateDto,
+  UserUpdatePasswordDto,
+} from './user.dto';
 import { UserEntity } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -31,6 +35,22 @@ export class UserService {
     await this.userRepository.update({ id: user.id }, { ...userDto });
 
     return this.userRepository.findOne(user.id);
+  }
+
+  async updatePassword(
+    user: UserEntity,
+    { password, passwordConfirmation }: UserUpdatePasswordDto,
+  ): Promise<UserEntity> {
+    if (password !== passwordConfirmation) {
+      throw new BadRequestException(
+        'user.passwordConfirmationDoNotMatch',
+        'Password and password confirmation do not match',
+      );
+    }
+
+    user.password = password;
+
+    return user.save();
   }
 
   async findUserByEmail(email: string): Promise<UserEntity> {

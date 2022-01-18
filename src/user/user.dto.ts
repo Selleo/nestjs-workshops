@@ -18,3 +18,12 @@ export class UserCreateDto extends PickType(UserEntity, [
 export class UserUpdateDto extends PartialType(
   PickType(UserEntity, ['email', 'name', 'fullName']),
 ) {}
+
+@InputType()
+export class UserUpdatePasswordDto {
+  @Field()
+  password: string;
+
+  @Field()
+  passwordConfirmation: string;
+}

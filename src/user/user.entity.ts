@@ -64,16 +64,12 @@ export class UserEntity extends BaseEntity {
   @Column()
   hash: string;
 
-  password: string;
+  set password(password: string) {
+    this.salt = crypto.randomBytes(16).toString('hex');
 
-  @BeforeInsert()
-  setPasswordBeforeInsert() {
-    this.setPassword();
-  }
-
-  @BeforeUpdate()
-  setPasswordBeforeUpdate() {
-    this.setPassword();
+    this.hash = crypto
+      .pbkdf2Sync(password, this.salt, 1000, 64, `sha512`)
+      .toString(`hex`);
   }
 
   isPasswordValid(password) {
@@ -81,15 +77,5 @@ export class UserEntity extends BaseEntity {
       .pbkdf2Sync(password, this.salt, 1000, 64, `sha512`)
       .toString(`hex`);
     return this.hash === hash;
-  }
-
-  private setPassword() {
-    if (!this.password) return;
-
-    this.salt = crypto.randomBytes(16).toString('hex');
-
-    this.hash = crypto
-      .pbkdf2Sync(this.password, this.salt, 1000, 64, `sha512`)
-      .toString(`hex`);
   }
 }
