@@ -10,6 +10,7 @@ import { FlowModule } from './flow/flow.module';
 import { RedisModule, RedisModuleOptions } from 'nestjs-redis';
 import { RedisConfig } from './redis/redis.config';
 import { PubsubModule } from './pubsub/pubsub.module';
+import { FileStorageModule } from './file-storage/file-storage.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { PubsubModule } from './pubsub/pubsub.module';
     UserModule,
     FlowModule,
     PubsubModule,
+    FileStorageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
