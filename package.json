@@ -39,6 +39,7 @@
     "graphql-redis-subscriptions": "^2.4.2",
     "graphql-upload": "^13.0.0",
     "mysql": "^2.18.1",
+    "nestjs-redis": "git+https://github.com/skunight/nestjs-redis.git#939f33a7f9b252e872c6edb76a3a860ed053bacf",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
