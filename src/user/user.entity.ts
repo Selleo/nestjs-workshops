@@ -11,9 +11,12 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { UserRole } from './user.type';
-import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
+import { Field, ID, InputType, ObjectType, PickType } from '@nestjs/graphql';
 import * as crypto from 'crypto';
 import { FlowEntity } from '../flow/flow.entity';
+import { plainToClass, plainToInstance, Type } from 'class-transformer';
+import { ValidateNested } from 'class-validator';
+import { UserSettings } from './user-settings';
 
 @InputType({ isAbstract: true })
 @ObjectType('User')
@@ -65,6 +68,17 @@ export class UserEntity extends BaseEntity {
 
   @Column()
   hash: string;
+
+  @Field(() => UserSettings, { defaultValue: {} })
+  @Column('json', {
+    transformer: {
+      from: (value): UserSettings => plainToInstance(UserSettings, value),
+      to: (value) => value,
+    },
+  })
+  @ValidateNested()
+  @Type(() => UserSettings)
+  settings: UserSettings;
 
   @OneToMany(() => FlowEntity, (flow) => flow.user)
   flows: FlowEntity[];

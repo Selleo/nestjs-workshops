@@ -7,6 +7,7 @@ export class UserCreateDto extends PickType(UserEntity, [
   'email',
   'name',
   'fullName',
+  'settings',
 ]) {
   @Field()
   password: string;
@@ -18,7 +19,7 @@ export class UserCreateDto extends PickType(UserEntity, [
 
 @InputType()
 export class UserUpdateDto extends PartialType(
-  PickType(UserEntity, ['email', 'name', 'fullName']),
+  PickType(UserEntity, ['email', 'name', 'fullName', 'settings']),
 ) {}
 
 @InputType()

@@ -19,6 +19,7 @@ export class UserResolver {
   async currentUser(
     @CurrentUserGql() currentUser: UserEntity,
   ): Promise<UserEntity> {
+    console.log('current user: ', currentUser);
     return currentUser;
   }
 
