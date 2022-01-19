@@ -4,6 +4,7 @@ import { FlowEntity } from './flow.entity';
 import { Repository } from 'typeorm';
 import { FlowCreateDto, FlowUpdateDto } from './flow.dto';
 import { UserEntity } from '../user/user.entity';
+import { nameof } from 'ts-simple-nameof';
 
 @Injectable()
 export class FlowService {
@@ -37,8 +38,11 @@ export class FlowService {
     return flow;
   }
 
-  async findForUser(user: UserEntity): Promise<FlowEntity> {
-    return this.flowRepository.findOne({ user });
+  async findForUser(id: number, user: UserEntity): Promise<FlowEntity> {
+    return this.flowRepository.findOne(
+      { id, user },
+      { relations: [nameof<FlowEntity>((flow) => flow.pdfFiles)] },
+    );
   }
 
   async findAllForUser(user: UserEntity): Promise<FlowEntity[]> {

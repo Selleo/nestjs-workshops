@@ -4,12 +4,15 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { FlowState } from './flow.type';
 import { Field, InputType, ObjectType } from '@nestjs/graphql';
+import { PdfFileEntity } from './pdf-file.entity';
+import { PdfFileUpdateDto } from './pdf-file.dto';
 
 @InputType({ isAbstract: true })
 @ObjectType('Flow')
@@ -43,7 +46,10 @@ export class FlowEntity extends BaseEntity {
   })
   state: FlowState;
 
-  @Field(() => UserEntity)
   @ManyToOne(() => UserEntity, (user) => user.flows)
   user: UserEntity;
+
+  @Field(() => [PdfFileEntity])
+  @OneToMany(() => PdfFileEntity, (file) => file.flow)
+  pdfFiles: PdfFileEntity[];
 }

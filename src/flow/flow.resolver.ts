@@ -66,7 +66,7 @@ export class FlowResolver {
     @Args({ name: 'id', type: () => ID }) id: number,
     @CurrentUserGql() currentUser: UserEntity,
   ): Promise<FlowEntity> {
-    return this.flowService.findForUser(currentUser);
+    return this.flowService.findForUser(id, currentUser);
   }
 
   @Subscription(() => FlowEntity, {
