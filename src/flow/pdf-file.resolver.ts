@@ -52,6 +52,21 @@ export class PdfFileResolver {
   }
 
   @UseGuards(UserGraphqlAuthGuard)
+  @Mutation(() => PdfFileEntity)
+  async pdfFileUpload(
+    @Args({ name: 'id', type: () => ID }) id: number,
+    @Args({ name: 'flowId', type: () => ID }) flowId: number,
+    @CurrentUserGql() currentUser: UserEntity,
+  ): Promise<boolean> {
+    const flow = await this.flowService.findForUser(flowId, currentUser);
+    const pdfFile = await this.pdfFileService.find(id, flow);
+
+    await this.pdfFileService.uploadToStorage(pdfFile);
+
+    return true;
+  }
+
+  @UseGuards(UserGraphqlAuthGuard)
   @Query(() => PdfFileEntity)
   async pdfFile(
     @Args({ name: 'id', type: () => ID }) id: number,

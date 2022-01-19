@@ -6,12 +6,14 @@ import { FlowCreateDto, FlowUpdateDto } from './flow.dto';
 import { UserEntity } from '../user/user.entity';
 import { PdfFileEntity } from './pdf-file.entity';
 import { PdfFileCreateDto, PdfFileUpdateDto } from './pdf-file.dto';
+import { FileStorageService } from '../file-storage/file-storage.service';
 
 @Injectable()
 export class PdfFileService {
   constructor(
     @InjectRepository(PdfFileEntity)
     private pdfFileRepository: Repository<PdfFileEntity>,
+    private fileStorage: FileStorageService,
   ) {}
 
   async create(
@@ -44,5 +46,9 @@ export class PdfFileService {
 
   async find(id: number, flow: FlowEntity): Promise<PdfFileEntity> {
     return this.pdfFileRepository.findOne({ id, flow });
+  }
+
+  async uploadToStorage(pdfFile: PdfFileEntity) {
+    await this.fileStorage.uploadFile(pdfFile.filename, pdfFile.content);
   }
 }
