@@ -8,3 +8,7 @@ export enum FlowState {
 }
 
 registerEnumType(FlowState, { name: 'FlowStateEnum' });
+
+export enum FLOW_EVENTS {
+  flowUpdated = 'flowUpdated',
+}
