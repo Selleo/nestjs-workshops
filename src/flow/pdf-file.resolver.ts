@@ -7,12 +7,14 @@ import { FlowService } from './flow.service';
 import { CurrentUserGql } from '../auth/current-user-gql.decorator';
 import { UserEntity } from '../user/user.entity';
 import { PdfFileService } from './pdf-file.service';
+import { PdfFileQueue } from './pdf-file.queue';
 
 @Resolver(PdfFileEntity)
 export class PdfFileResolver {
   constructor(
     private pdfFileService: PdfFileService,
     private flowService: FlowService,
+    private pdfFileQueue: PdfFileQueue,
   ) {}
 
   @UseGuards(UserGraphqlAuthGuard)
@@ -52,16 +54,16 @@ export class PdfFileResolver {
   }
 
   @UseGuards(UserGraphqlAuthGuard)
-  @Mutation(() => PdfFileEntity)
+  @Mutation(() => Boolean)
   async pdfFileUpload(
     @Args({ name: 'id', type: () => ID }) id: number,
     @Args({ name: 'flowId', type: () => ID }) flowId: number,
     @CurrentUserGql() currentUser: UserEntity,
   ): Promise<boolean> {
     const flow = await this.flowService.findForUser(flowId, currentUser);
-    const pdfFile = await this.pdfFileService.find(id, flow);
+    const pdfFile = await this.pdfFileService.find({ id, flow });
 
-    await this.pdfFileService.uploadToStorage(pdfFile);
+    await this.pdfFileQueue.enqueueUploadPdfFile(pdfFile.id);
 
     return true;
   }
@@ -75,6 +77,6 @@ export class PdfFileResolver {
   ): Promise<PdfFileEntity> {
     const flow = await this.flowService.findForUser(flowId, currentUser);
 
-    return this.pdfFileService.find(id, flow);
+    return this.pdfFileService.find({ id, flow });
   }
 }

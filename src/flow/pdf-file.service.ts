@@ -44,8 +44,8 @@ export class PdfFileService {
     return pdfFile;
   }
 
-  async find(id: number, flow: FlowEntity): Promise<PdfFileEntity> {
-    return this.pdfFileRepository.findOne({ id, flow });
+  async find(conditions: Partial<PdfFileEntity>): Promise<PdfFileEntity> {
+    return this.pdfFileRepository.findOne(conditions);
   }
 
   async uploadToStorage(pdfFile: PdfFileEntity) {

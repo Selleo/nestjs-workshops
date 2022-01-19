@@ -8,5 +8,9 @@ export const RedisConfig = registerAs('redis', () => {
 
   return {
     redisUrl: `redis://${redisUser}:${redisPassword}@${redisHost}:${redisPort}`,
+    host: redisHost,
+    port: redisPort,
+    username: redisUser,
+    password: redisPassword,
   };
 });
