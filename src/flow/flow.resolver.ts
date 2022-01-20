@@ -61,6 +61,15 @@ export class FlowResolver {
   }
 
   @UseGuards(UserGraphqlAuthGuard)
+  @Query(() => [FlowEntity])
+  flowsSearch(
+    @Args('search') search: string,
+    @CurrentUserGql() currentUser: UserEntity,
+  ): Promise<FlowEntity[]> {
+    return this.flowService.search(search, currentUser);
+  }
+
+  @UseGuards(UserGraphqlAuthGuard)
   @Query(() => FlowEntity)
   flow(
     @Args({ name: 'id', type: () => ID }) id: number,

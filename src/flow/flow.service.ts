@@ -46,6 +46,20 @@ export class FlowService {
   }
 
   async findAllForUser(user: UserEntity): Promise<FlowEntity[]> {
-    return this.flowRepository.find({ user });
+    return this.flowRepository.find({
+      where: { user },
+      relations: [nameof<FlowEntity>((flowEntity) => flowEntity.pdfFiles)],
+    });
+  }
+
+  async search(search: string, user: UserEntity): Promise<FlowEntity[]> {
+    return this.flowRepository
+      .createQueryBuilder('flow')
+      .innerJoinAndSelect('flow.pdfFiles', 'pdfFile')
+      .where('flow.userId = :userId', { userId: user.id })
+      .where('flow.name LIKE :search OR pdfFile.filename LIKE :search', {
+        search: `%${search}%`,
+      })
+      .getMany();
   }
 }
