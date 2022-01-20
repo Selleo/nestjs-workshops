@@ -11,6 +11,7 @@ import { BullModule } from '@nestjs/bull';
 import { PdfFileQueue, PdfFileQueueName } from './pdf-file.queue';
 import { RedisConfig } from '../redis/redis.config';
 import { ConfigModule, ConfigType } from '@nestjs/config';
+import { PdfFileConsole } from './pdf-file.console';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { ConfigModule, ConfigType } from '@nestjs/config';
     PdfFileService,
     PdfFileResolver,
     PdfFileQueue,
+    PdfFileConsole,
   ],
 })
 export class FlowModule {}
