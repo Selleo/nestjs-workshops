@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FlowEntity } from './flow.entity';
 import { Repository } from 'typeorm';
-import { FlowCreateDto, FlowUpdateDto } from './flow.dto';
-import { UserEntity } from '../user/user.entity';
 import { PdfFileEntity } from './pdf-file.entity';
 import { PdfFileCreateDto, PdfFileUpdateDto } from './pdf-file.dto';
 import { FileStorageService } from '../file-storage/file-storage.service';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class PdfFileService {
@@ -14,6 +18,7 @@ export class PdfFileService {
     @InjectRepository(PdfFileEntity)
     private pdfFileRepository: Repository<PdfFileEntity>,
     private fileStorage: FileStorageService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async create(
@@ -50,5 +55,21 @@ export class PdfFileService {
 
   async uploadToStorage(pdfFile: PdfFileEntity) {
     await this.fileStorage.uploadFile(pdfFile.filename, pdfFile.content);
+  }
+
+  async downloadFromStorage(pdfFile: PdfFileEntity): Promise<string> {
+    const cacheKey = `pdf-file-downloaded-file-${pdfFile.filename}`;
+    const cachedResult = await this.cacheManager.get<string>(cacheKey);
+
+    if (cachedResult) return cachedResult;
+
+    const fileEntry = await this.fileStorage.downloadFile(pdfFile.filename);
+
+    if (!fileEntry)
+      throw new BadRequestException('The file was not uploaded to the storage');
+
+    await this.cacheManager.set<string>(cacheKey, fileEntry.content);
+
+    return fileEntry.content;
   }
 }

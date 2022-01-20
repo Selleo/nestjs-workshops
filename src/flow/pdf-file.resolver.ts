@@ -79,4 +79,17 @@ export class PdfFileResolver {
 
     return this.pdfFileService.find({ id, flow });
   }
+
+  @UseGuards(UserGraphqlAuthGuard)
+  @Query(() => String)
+  async pdfFileDownload(
+    @Args({ name: 'id', type: () => ID }) id: number,
+    @Args({ name: 'flowId', type: () => ID }) flowId: number,
+    @CurrentUserGql() currentUser: UserEntity,
+  ): Promise<string> {
+    const flow = await this.flowService.findForUser(flowId, currentUser);
+    const pdfFile = await this.pdfFileService.find({ id, flow });
+
+    return this.pdfFileService.downloadFromStorage(pdfFile);
+  }
 }

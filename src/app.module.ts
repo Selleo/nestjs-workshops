@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -12,6 +12,7 @@ import { RedisConfig } from './redis/redis.config';
 import { PubsubModule } from './pubsub/pubsub.module';
 import { FileStorageModule } from './file-storage/file-storage.module';
 import { ConsoleModule } from 'nestjs-console';
+import * as redisStore from 'cache-manager-redis-store';
 
 @Module({
   imports: [
@@ -34,6 +35,16 @@ import { ConsoleModule } from 'nestjs-console';
           { name: 'subscriber', ...config },
         ];
       },
+    }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule.forFeature(RedisConfig)],
+      isGlobal: true,
+      inject: [RedisConfig.KEY],
+      useFactory: (redisConfig: ConfigType<typeof RedisConfig>) => ({
+        store: redisStore,
+        url: redisConfig.redisUrl,
+        ttl: 60,
+      }),
     }),
     ConsoleModule,
     AuthModule,
