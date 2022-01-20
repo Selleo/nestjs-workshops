@@ -19,7 +19,9 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/database/ormconfig.js"
+    "typeorm": "node -r ts-node/register -r tsconfig-paths/register ./node_modules/typeorm/cli.js --config src/database/ormconfig.js",
+    "console:dev": "ts-node -r tsconfig-paths/register src/console.ts",
+    "console": "node build/console.js"
   },
   "dependencies": {
     "@bull-board/api": "^3.9.0",
@@ -43,6 +45,7 @@
     "graphql-redis-subscriptions": "^2.4.2",
     "graphql-upload": "^13.0.0",
     "mysql": "^2.18.1",
+    "nestjs-console": "^7.0.1",
     "nestjs-redis": "git+https://github.com/skunight/nestjs-redis.git#939f33a7f9b252e872c6edb76a3a860ed053bacf",
     "passport": "^0.5.2",
     "passport-jwt": "^4.0.0",

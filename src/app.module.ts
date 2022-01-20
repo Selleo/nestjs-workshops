@@ -11,6 +11,7 @@ import { RedisModule, RedisModuleOptions } from 'nestjs-redis';
 import { RedisConfig } from './redis/redis.config';
 import { PubsubModule } from './pubsub/pubsub.module';
 import { FileStorageModule } from './file-storage/file-storage.module';
+import { ConsoleModule } from 'nestjs-console';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { FileStorageModule } from './file-storage/file-storage.module';
         ];
       },
     }),
+    ConsoleModule,
     AuthModule,
     UserModule,
     FlowModule,
