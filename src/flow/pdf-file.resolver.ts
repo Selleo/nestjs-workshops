@@ -76,6 +76,10 @@ export class PdfFileResolver {
     const flow = await this.flowService.findForUser(flowId, currentUser);
     const pdfFile = await this.pdfFileService.find({ id, flow });
 
+    this.logger.log(
+      `Uploading file for flow: ${flow.id} and pdf file: ${pdfFile.id}`,
+    );
+
     // this.logger.log(`FLOW SESSION TOKEN: ${this.flowSessionService.token}`);
     //
     // this.flowProcessorService.processFlow();
