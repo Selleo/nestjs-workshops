@@ -12,6 +12,9 @@ import { PdfFileQueue, PdfFileQueueName } from './pdf-file.queue';
 import { RedisConfig } from '../redis/redis.config';
 import { ConfigModule, ConfigType } from '@nestjs/config';
 import { PdfFileConsole } from './pdf-file.console';
+import { FlowSessionRequestService } from './flow-session-request.service';
+import { FlowProcessorDefaultService } from './flow-processor-default.service';
+import { FlowPerformerTransientService } from './flow-performer-transient.service';
 
 @Module({
   imports: [
@@ -45,6 +48,9 @@ import { PdfFileConsole } from './pdf-file.console';
     PdfFileResolver,
     PdfFileQueue,
     PdfFileConsole,
+    FlowSessionRequestService,
+    FlowProcessorDefaultService,
+    FlowPerformerTransientService,
   ],
 })
 export class FlowModule {}
